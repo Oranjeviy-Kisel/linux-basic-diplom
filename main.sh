@@ -6,7 +6,7 @@
 
 VM_NAME=`hostname`
 
-if [[ ${VM_NAME} && -d "/mnt/diplom/${VM_NAME}" ]]; then
+if [[ ${VM_NAME} && -d "./${VM_NAME}" ]]; then
   echo "Found dir $VM_NAME ... Starting script"
   sleep 1s  
   cd /mnt/diplom/$VM_NAME
