@@ -51,11 +51,19 @@ sudo groupmod -n newUsername oldUsername
 sudo usermod -d /home/newHomeDir -m newUsername
 ```
 
-Проверить root-доступ через ssh на настроенные ранее статические ip
+Проверить root-доступ через ssh на настроенные ранее статические ip, пример
 
 ```
 ssh root@10.100.10.5
 ```
+
+В репозитории на Гитхабе не храним рабочие дистрибы, поэтому нееобходимо скопировать дистрибы .dpkg 
+(лежат в некотором локальном хранилище, напр. флешке или локальной сетевой папке...) в папки виртуалок:
+
+- 01-fe дистриб filebeat_8.17.1_amd64.deb 
+- 06-monitor дистриб grafana_11.2.2_amd64-224190-b9e9cd.deb
+- 07-elk дистрибы elasticsearch_8.17.1_amd64.deb, kibana_8.17.1_amd64.deb, logstash_8.17.1_amd64.deb
+
 
 ### Описание 01-fe
 
@@ -81,9 +89,11 @@ ssh root@10.100.10.5
 
 ### Описание 06-monitor
 
-Поднят сервер мониторинга Prometheus,
+Поднят сервер мониторинга Prometheus, установлено web-графическое real-time отображение с дашбордами на основе Grafana 
 
 ### Описание 06-elk
+
+
 
 # Порядок настройки
 
@@ -105,5 +115,9 @@ ssh root@10.100.10.5
 
 - http://10.100.10.10:9090 Prometheus
 - http://10.100.10.10:3000 Grafana
-- http://10.100.10.11:.......... Kibana
+- http://10.100.10.11:5601 Kibana
+
+Настройки Kibana: management -> stack management -> index management
+установить источник поступления weblog-гов с сервера 10.100.10.5 (nginx)
+
 
