@@ -32,7 +32,7 @@ chmod 755 /etc/apache2/apache2.conf
 
 # импортируем папку html из скачанной с гита папки 02-be в папку /var/www
 rm -rf /var/www/html
-cp ./html /var/www/html
+cp -r /linux-basic-diplom/02-be/html /var/www/
 
 # даем права на чтение
 chmod 755 /var/www/html
