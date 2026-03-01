@@ -4,6 +4,10 @@
 # выводим успешное начало работы скрипта
 echo 'Hello from host @02-be, beginning to install'
 
+wdir=$(pwd)
+#echo $wdir
+
+
 # проверяем актуальность apt update
 apt update
 
@@ -22,17 +26,17 @@ apt install -y php-mysql
 
 # импортируем конфиги из скачанной с гита папки 02-be в в Apache, предварительно удалив старые
 rm -rf /etc/apache2/ports.conf
-cp ./ports.conf /etc/apache2/ports.conf
+cp $wdir/ports.conf /etc/apache2/ports.conf
 chmod 755 /etc/apache2/ports.conf
 
 rm -rf /etc/apache2/apache2.conf
-cp ./apache2.conf /etc/apache2/apache2.conf
+cp $wdir/apache2.conf /etc/apache2/apache2.conf
 chmod 755 /etc/apache2/apache2.conf
 
 
 # импортируем папку html из скачанной с гита папки 02-be в папку /var/www
 rm -rf /var/www/html
-cp -r /linux-basic-diplom/02-be/html /var/www/
+cp -r $wdir/html /var/www/
 
 # даем права на чтение
 chmod 755 /var/www/html

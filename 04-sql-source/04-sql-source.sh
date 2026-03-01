@@ -21,6 +21,8 @@ rm -rf /etc/mysql/mysql.conf.d/mysqld.cnf
 cp ./mysqld.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 chmod 755 /etc/mysql/mysql.conf.d/mysqld.cnf
 
+# Даем на будущее права на запуск скрипту
+chmod 755 ./add-db.sh
 
 #Рестартуем 
 systemctl restart mysql

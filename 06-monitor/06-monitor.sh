@@ -21,6 +21,7 @@ rm -rf /etc/prometheus/prometheus.yml
 cp ./prometheus.yml /etc/prometheus/prometheus.yml
 chmod 777 /etc/prometheus/prometheus.yml
 
+systemctl enable --now prometheus
 
 # Сначала устанавиливаем Package musl , на который будет ругаться Grafana
 apt install musl -y
@@ -34,21 +35,14 @@ dpkg -i ./grafana_11.2.2_amd64-224190-b9e9cd.deb
 cp ./main.yml /etc/grafana/provisioning/datasources/main.yml
 chmod 777 /etc/grafana/provisioning/datasources/main.yml
 
-
-# рестартуем 
-systemctl daemon-reload
-
-systemctl start prometheus
-# systemctl status prometheus
-
-systemctl enable prometheus
-
 systemctl start grafana-server
 # systemctl status grafana-server
- 
 
-exit
 
+# ждем 15с чтоб все изменения прошли и рестартуем на всякий
+sleep 15s
+systemctl daemon-reload
+systemctl restart prometheus.service
 
 
 # тут prometheus-node-exporter на web-сервере

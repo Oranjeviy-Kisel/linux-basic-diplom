@@ -30,19 +30,20 @@ systemctl restart mysql
 if [[ `mysql -uroot -e "SHOW DATABASES;"  | cat - | grep mysql` -eq "mysql" ]]; 
   then 
     echo "all is good, enabling REPLICA"
-    # руту заводить пароль может не надо: mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY '123';"
+    # руту заводим пароль: 
+    mysql -uroot -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH 'caching_sha2_password' BY '123';"
     # на всякий стоп реплику
-    mysql -uroot -e "STOP REPLICA;"
-    mysql -uroot -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='10.100.10.8', SOURCE_USER='repl', SOURCE_PASSWORD='1234', SOURCE_AUTO_POSITION = 0, GET_SOURCE_PUBLIC_KEY = 1;"    
-    mysql -uroot -e "START REPLICA;"
+    mysql -uroot -p123 -e "STOP REPLICA;"
+    mysql -uroot -p123 -e "CHANGE REPLICATION SOURCE TO SOURCE_HOST='10.100.10.8', SOURCE_USER='repl', SOURCE_PASSWORD='1234', SOURCE_AUTO_POSITION = 0, GET_SOURCE_PUBLIC_KEY = 1;"    
+    mysql -uroot -p123 -e "START REPLICA;"
 fi
 
 
 # выше при настройке реплики давало глобальную ошибку, поэтому сначала выставили 0, теперь выставляяем 1 и главное RESET
-mysql -uroot -e "STOP REPLICA;"
-mysql -uroot -e "RESET REPLICA;"
-mysql -uroot -e "CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 1;"
-mysql -uroot -e "START REPLICA;"
+mysql -uroot -p123 -e "STOP REPLICA;"
+mysql -uroot -p123 -e "RESET REPLICA;"
+mysql -uroot -p123 -e "CHANGE REPLICATION SOURCE TO SOURCE_AUTO_POSITION = 1;"
+mysql -uroot -p123 -e "START REPLICA;"
 
 
 #Рестартуем 
@@ -55,6 +56,8 @@ apt install -y cron
 systemctl enable --now cron
 echo "Adding database backup script to crontab..."
 
+chmod 777 /root/linux-basic-diplom/05-sql-replica/db-backup.sh
+
 # Бэкап - каждые 3 минуты запуск скрипта
-echo '*/3 * * * * root /linux-basic-diplom/05-sql-replica/db-backup.sh >> /var/log/db-backup.log 2>&1' >> /etc/crontab
+echo '*/3 * * * * root /root/linux-basic-diplom/05-sql-replica/db-backup.sh >> /var/log/db-backup.log 2>&1' >> /etc/crontab
 
